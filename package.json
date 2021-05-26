@@ -1,6 +1,6 @@
 {
   "name": "@nimbox/canexer-application-types",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "GraphQL typescript types",
   "main": "dist/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "preversion": "npm install && npm run build",
     "postversion": "git push origin master --follow-tags && npm publish"
-},
+  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@nimbox"
   },
