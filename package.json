@@ -1,0 +1,24 @@
+{
+  "name": "@nimbox/canexer-application-types",
+  "version": "0.1.0",
+  "description": "GraphQL typescript types",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist/* && rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nimbox/canexer-application-types.git"
+  },
+  "license": "ISC",
+  "homepage": "https://github.com/nimbox/canexer-application-types#readme",
+  "bugs": {
+    "url": "https://github.com/nimbox/canexer-application-types/issues"
+  },
+  "devDependencies": {
+    "rollup": "^2.50.1",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "typescript": "^4.3.2"
+  }
+}
