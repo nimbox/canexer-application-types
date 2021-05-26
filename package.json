@@ -7,7 +7,7 @@
     "build": "rm -rf dist/* && rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1",
     "preversion": "npm install && npm run build",
-    "postversion": "git push origin master --follow-tags && npm publish"
+    "postversion": "git push origin main --follow-tags && npm publish"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@nimbox"
