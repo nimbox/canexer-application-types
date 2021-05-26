@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rm -rf dist/* && rollup -c",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:watch": "rm -rf dist/* && rollup -cw",
     "preversion": "npm install && npm run build",
     "postversion": "git push origin main --follow-tags && npm publish"
   },
