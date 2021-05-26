@@ -7,6 +7,9 @@
     "build": "rm -rf dist/* && rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@nimbox"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nimbox/canexer-application-types.git"
