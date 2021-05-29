@@ -1,6 +1,6 @@
 {
   "name": "@nimbox/canexer-application-types",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "GraphQL typescript types",
   "main": "dist/index.js",
   "module": "dist/index.js",
