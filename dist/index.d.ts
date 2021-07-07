@@ -35,17 +35,17 @@ export interface Contact extends Local {
     createdOn: Date;
     updatedOn: Date;
     deletedOn: Date;
-    urls: ContactUrl[];
-    phones: ContactPhone[];
-    tags: Tag[];
-    emails: ContactEmail[];
-    networks: ContactNetwork[];
-    addresses: ContactAddress[];
     locations: ContactLocation[];
     anniversaries: ContactAnniversary[];
-    notes: Note[];
+    addresses: ContactAddress[];
+    networks: ContactNetwork[];
+    phones: ContactPhone[];
     customers: Customer[];
     representatives: Representative[];
+    notes: Note[];
+    emails: ContactEmail[];
+    tags: Tag[];
+    urls: ContactUrl[];
 }
 export interface Local {
     id: ID;
@@ -83,6 +83,11 @@ export interface PendingReceivableResultData {
     customerId: ID;
     dueDaysClass: number;
 }
+export interface UserError {
+    name: string;
+    value: string;
+    code: string;
+}
 export interface ContactLocation extends ContactElement, Local {
     kind: string;
     latitude: number;
@@ -97,6 +102,10 @@ export interface ContactLocation extends ContactElement, Local {
     createdOn: Date;
     updatedOn: Date;
     deletedOn: Date;
+}
+export interface CreateContactResult {
+    errors: UserError[];
+    contact: Contact;
 }
 export interface ReceivableReconciliationDetail extends Local {
     entry: string;
@@ -209,6 +218,10 @@ export interface PriceListDetail extends Local {
     updatedOn: Date;
     deletedOn: Date;
 }
+export interface CreateNoteResult {
+    note: Note;
+    errors: UserError[];
+}
 export interface ContactEmail extends ContactElement, Local {
     address: string;
     kind: string;
@@ -266,15 +279,6 @@ export interface Unit extends Local {
     updatedOn: Date;
     deletedOn: Date;
 }
-export interface UserError {
-    name: string;
-    value: string;
-    code: string;
-}
-export interface CreateContactResult {
-    errors: UserError[];
-    contact: Contact;
-}
 export interface BoxApplicationPermission extends Local {
     kind: string;
     configuration: string;
@@ -288,8 +292,8 @@ export interface BoxApplicationPermission extends Local {
     deletedOn: Date;
 }
 export interface Note extends Local {
-    kind: string;
     description: string;
+    kind: string;
     displayOn: Date;
     latitude: number;
     longitude: number;
@@ -393,8 +397,8 @@ export interface SaleDocumentDetail extends Local {
     deletedOn: Date;
 }
 export interface PendingReceivablesResultData {
-    future: PendingReceivablesResultDataGroup;
     past: PendingReceivablesResultDataGroup;
+    future: PendingReceivablesResultDataGroup;
     count: number;
     dueDays: number;
     debits: number;
@@ -417,14 +421,6 @@ export interface MemberApplicationBusinessPermission extends Local {
 export interface PendingReceivablesHistoryResult {
     now: Date;
     data: ReceivablePendingByDate[];
-}
-export interface CreateNoteResult {
-    note: Note;
-    errors: UserError[];
-}
-export interface UpdateNoteResult {
-    note: Note;
-    errors: UserError[];
 }
 export interface SaleDocument extends Local {
     entry: string;
@@ -640,13 +636,13 @@ export interface User extends Local {
     avatar: string;
     avatarOriginal: string;
 }
-export interface UpdateTagDetailResult {
-    tag: Tag;
+export interface CreateUpdateUserResult {
     errors: UserError[];
+    user: User;
 }
 export interface Tag extends Local {
-    kind: string;
     description: string;
+    kind: string;
     color: string;
     background: string;
     meaning: string;
@@ -679,8 +675,8 @@ export interface Organization extends Contact, Local {
 }
 export interface Hashtag extends Local {
     handle: string;
-    kind: string;
     description: string;
+    kind: string;
     color: string;
     background: string;
     id: ID;
@@ -762,8 +758,8 @@ export interface Business extends Local {
     provider: string;
     country: string;
     currency: string;
-    kind: string;
     description: string;
+    kind: string;
     configuration: string;
     boxId: number;
     taxId: string;
@@ -786,8 +782,8 @@ export interface Application extends Local {
 }
 export interface ReceivablePendingByDate {
     date: Date;
-    future: ReceivablePendingByEntry;
     past: ReceivablePendingByEntry;
+    future: ReceivablePendingByEntry;
     total: ReceivablePendingByEntry;
 }
 export interface Box extends Local {
@@ -804,6 +800,10 @@ export interface Box extends Local {
     updatedOn: Date;
     deletedOn: Date;
     applications: Application[];
+}
+export interface UpdateNoteResult {
+    note: Note;
+    errors: UserError[];
 }
 export interface PendingReceivableResult {
     representatives: Representative[];
@@ -839,10 +839,6 @@ export interface HashtagReference extends Local {
     updatedOn: Date;
     deletedOn: Date;
 }
-export interface CreateUpdateUserResult {
-    user: User;
-    errors: UserError[];
-}
 export interface Currency extends Local {
     name: string;
     kind: string;
@@ -856,6 +852,10 @@ export interface Currency extends Local {
 export interface ReceivablePaymentHistoryResult {
     issued: Date;
     total: number;
+}
+export interface UpdateTagDetailResult {
+    tag: Tag;
+    errors: UserError[];
 }
 export interface Country extends Local {
     name: string;
@@ -872,49 +872,6 @@ export interface ReceivablePending {
     dueDays: number;
     pending: number;
 }
-export interface ContactPhoneActionsInput {
-    create: ContactPhoneIdInput[];
-    update: ContactPhoneIdInput[];
-    delete: ID[];
-}
-export interface ContactNetworkInput {
-    handle: string;
-    provider: string;
-    sequence: number;
-    locus: string;
-}
-export interface ContactAddressActionsInput {
-    create: ContactAddressIdInput[];
-    update: ContactAddressIdInput[];
-    delete: ID[];
-}
-export interface ContactEmailActionsInput {
-    create: ContactEmailIdInput[];
-    update: ContactEmailIdInput[];
-    delete: ID[];
-}
-export interface ContactUrlActionsInput {
-    create: ContactUrlIdInput[];
-    update: ContactUrlIdInput[];
-    delete: ID[];
-}
-export interface TagFilterInput {
-    limit: number;
-    q: string;
-}
-export interface ContactPhoneInput {
-    number: string;
-    sequence: number;
-    locus: string;
-}
-export interface ContactEventsFilterInput {
-    days: number;
-}
-export interface ContactNetworkActionsInput {
-    create: ContactNetworkIdInput[];
-    update: ContactNetworkIdInput[];
-    delete: ID[];
-}
 export interface ContactAnniversaryActionsInput {
     create: ContactAnniversaryIdInput[];
     update: ContactAnniversaryIdInput[];
@@ -927,14 +884,41 @@ export interface ContactAnniversaryInput {
     sequence: number;
     locus: string;
 }
+export interface ContactPhoneActionsInput {
+    create: ContactPhoneIdInput[];
+    update: ContactPhoneIdInput[];
+    delete: ID[];
+}
 export interface ContactAnniversaryIdInput {
     anniversary: ContactAnniversaryInput;
     id: ID;
 }
-export interface ContactUrlInput {
-    specification: string;
-    sequence: number;
-    locus: string;
+export interface ContactNetworkActionsInput {
+    create: ContactNetworkIdInput[];
+    update: ContactNetworkIdInput[];
+    delete: ID[];
+}
+export interface ContactEmailActionsInput {
+    create: ContactEmailIdInput[];
+    update: ContactEmailIdInput[];
+    delete: ID[];
+}
+export interface ContactEventsFilterInput {
+    days: number;
+}
+export interface ContactUrlActionsInput {
+    create: ContactUrlIdInput[];
+    update: ContactUrlIdInput[];
+    delete: ID[];
+}
+export interface ContactLocationActionsInput {
+    create: ContactLocationIdInput[];
+    update: ContactLocationIdInput[];
+    delete: ID[];
+}
+export interface ContactUrlIdInput {
+    url: ContactUrlInput;
+    id: ID;
 }
 export interface ContactLocationInput {
     latitude: number;
@@ -942,19 +926,27 @@ export interface ContactLocationInput {
     sequence: number;
     locus: string;
 }
-export interface ContactEmailInput {
-    address: string;
+export interface TagFilterInput {
+    q: string;
+    limit: number;
+}
+export interface ContactPhoneInput {
+    number: string;
     sequence: number;
     locus: string;
 }
-export interface ContactPhoneIdInput {
-    phone: ContactPhoneInput;
-    id: ID;
+export interface TagInput {
+    description: string;
+    type: string;
+    backgroundColor: string;
+    color: string;
+    parentId: ID;
 }
 export interface UpdateSelfInput {
     handle: string;
     locale: string;
     zone: string;
+    avatarOriginal: Upload;
     firstName: string;
     lastName: string;
     uid: string;
@@ -966,7 +958,10 @@ export interface UpdateSelfInput {
     avatarSize: number;
     emailAddress: string;
     phoneNumber: string;
-    avatarOriginal: Upload;
+}
+export interface ContactLocationIdInput {
+    location: ContactLocationInput;
+    id: ID;
 }
 export interface ContactFilterInput {
     search: string;
@@ -980,9 +975,9 @@ export interface CreateBusinessInput {
     description: string;
     taxId: string;
 }
-export interface ContactLocationActionsInput {
-    create: ContactLocationIdInput[];
-    update: ContactLocationIdInput[];
+export interface ContactAddressActionsInput {
+    create: ContactAddressIdInput[];
+    update: ContactAddressIdInput[];
     delete: ID[];
 }
 export interface UpdateBusinessInput {
@@ -994,12 +989,13 @@ export interface UpdateBusinessInput {
     description: string;
     taxId: string;
 }
-export interface ContactUrlIdInput {
-    url: ContactUrlInput;
-    id: ID;
+export interface ContactEmailInput {
+    address: string;
+    sequence: number;
+    locus: string;
 }
-export interface ContactAddressIdInput {
-    address: ContactAddressInput;
+export interface ContactNetworkIdInput {
+    network: ContactNetworkInput;
     id: ID;
 }
 export interface ReceivableDocumentFilterInput {
@@ -1007,11 +1003,21 @@ export interface ReceivableDocumentFilterInput {
     remoteSource: string;
     pending: Boolean;
 }
+export interface ContactPhoneIdInput {
+    phone: ContactPhoneInput;
+    id: ID;
+}
+export interface ContactNetworkInput {
+    handle: string;
+    provider: string;
+    sequence: number;
+    locus: string;
+}
 export interface ReceivablePaymentHistoryInputFilter {
     months: number;
-    representativeContactId: ID;
     businessId: ID[];
     customerContactId: ID;
+    representativeContactId: ID;
 }
 export interface NoteInput {
     description: string;
@@ -1022,14 +1028,22 @@ export interface NoteInput {
     locked: Boolean;
     pinned: Boolean;
 }
-export interface TagInput {
-    description: string;
-    color: string;
-    background: string;
-}
 export interface ContactInput {
     comment: string;
     organizationName: string;
+}
+export interface ContactAddressIdInput {
+    address: ContactAddressInput;
+    id: ID;
+}
+export interface ContactUrlInput {
+    specification: string;
+    sequence: number;
+    locus: string;
+}
+export interface ContactEmailIdInput {
+    email: ContactEmailInput;
+    id: ID;
 }
 export interface ContactAddressInput {
     reference: string;
@@ -1040,16 +1054,4 @@ export interface ContactAddressInput {
     city: string;
     sequence: number;
     locus: string;
-}
-export interface ContactNetworkIdInput {
-    network: ContactNetworkInput;
-    id: ID;
-}
-export interface ContactLocationIdInput {
-    location: ContactLocationInput;
-    id: ID;
-}
-export interface ContactEmailIdInput {
-    email: ContactEmailInput;
-    id: ID;
 }
