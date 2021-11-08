@@ -21,13 +21,13 @@ export interface ContactElement extends Local {
 export interface Contact extends Local {
     comment: string;
     displayName: string;
-    contactId: number;
-    code: string;
     kind: string;
-    meta: string;
     firstName: string;
     lastName: string;
     organizationName: string;
+    meta: string;
+    contactId: number;
+    code: string;
     position: string;
     remoteSource: string;
     remoteId: string;
@@ -62,13 +62,33 @@ export interface Local {
     createdBy?: User;
     updatedBy?: User;
 }
+export interface PendingReceivableResult {
+    data?: PendingReceivableResultData[];
+    representatives?: Representative[];
+}
+export interface TaskState extends Local {
+    description?: string;
+    kind: string;
+    color: string;
+    backgroundColor: string;
+    parentId?: ID;
+    flowId: ID;
+    title: string;
+    parentSequence: number;
+    id: ID;
+    version: number;
+    displayOn?: Date;
+    createdOn: Date;
+    updatedOn: Date;
+    deletedOn?: Date;
+}
 export interface PriceListUnitDetail extends Local {
     currency: string;
     kind: string;
+    unit: string;
     priceListId: number;
     productId: number;
     price: number;
-    unit: string;
     remoteSource: string;
     remoteId: string;
     id: ID;
@@ -78,10 +98,14 @@ export interface PriceListUnitDetail extends Local {
     updatedOn: Date;
     deletedOn?: Date;
 }
+export interface CreateContactResult {
+    contact?: Contact;
+    errors?: UserError[];
+}
 export interface ContactLocation extends ContactElement, Local {
+    kind: string;
     latitude: number;
     longitude: number;
-    kind: string;
     contactId: number;
     sequence: number;
     locus?: string;
@@ -93,6 +117,12 @@ export interface ContactLocation extends ContactElement, Local {
     createdOn: Date;
     updatedOn: Date;
     deletedOn?: Date;
+}
+export interface ClassifiedTaskFlowStructure {
+    first?: TaskFlowStructure;
+    pendings: TaskFlowStructure[];
+    fulfilled?: TaskFlowStructure;
+    rejected?: TaskFlowStructure;
 }
 export interface ContactAnniversary extends ContactElement, Local {
     year?: number;
@@ -131,15 +161,15 @@ export interface ReceivableReconciliationDetail extends Local {
     createdOn: Date;
     updatedOn: Date;
     deletedOn?: Date;
-    reconciliation?: ReceivableReconciliation;
     receivable?: ReceivableDocument;
+    reconciliation?: ReceivableReconciliation;
 }
 export interface BoxApplicationPermission extends Local {
-    boxId: number;
-    applicationId: number;
     kind: string;
     configuration: string;
     meta: string;
+    boxId: number;
+    applicationId: number;
     id: ID;
     version: number;
     displayOn?: Date;
@@ -150,14 +180,50 @@ export interface BoxApplicationPermission extends Local {
 export interface Person extends Contact, Local {
     comment: string;
     displayName: string;
-    contactId: number;
-    code: string;
     kind: string;
-    meta: string;
     firstName: string;
     lastName: string;
     organizationName: string;
+    meta: string;
+    contactId: number;
+    code: string;
     position: string;
+    remoteSource: string;
+    remoteId: string;
+    id: ID;
+    version: number;
+    displayOn?: Date;
+    createdOn: Date;
+    updatedOn: Date;
+    deletedOn?: Date;
+}
+export interface PendingReceivablesByDueDaysClassResultData {
+    count?: number;
+    dueDaysClass?: number;
+    debits?: number;
+    credits?: number;
+}
+export interface DefaultTask {
+    id: ID;
+    zone?: string;
+    description: string;
+    due?: Date;
+}
+export interface ReceivablePaymentHistoryResult {
+    issued?: Date;
+    total?: number;
+}
+export interface ContactAddress extends ContactElement, Local {
+    reference?: string;
+    state?: string;
+    country?: string;
+    kind: string;
+    street?: string;
+    postal?: string;
+    city?: string;
+    contactId: number;
+    sequence: number;
+    locus?: string;
     remoteSource: string;
     remoteId: string;
     id: ID;
@@ -183,45 +249,12 @@ export interface Warehouse extends Local {
     updatedOn: Date;
     deletedOn?: Date;
 }
-export interface ContactAddress extends ContactElement, Local {
-    reference?: string;
-    state?: string;
-    country?: string;
-    street?: string;
-    postal?: string;
-    city?: string;
-    kind: string;
-    contactId: number;
-    sequence: number;
-    locus?: string;
-    remoteSource: string;
-    remoteId: string;
-    id: ID;
-    version: number;
-    displayOn?: Date;
-    createdOn: Date;
-    updatedOn: Date;
-    deletedOn?: Date;
-}
-export interface UserReference extends Local {
-    handle: string;
-    userId: number;
-    referenceId: number;
-    kind: string;
-    id: ID;
-    version: number;
-    displayOn?: Date;
-    createdOn: Date;
-    updatedOn: Date;
-    deletedOn?: Date;
-}
 export interface Product extends Local {
     name: string;
     comment: string;
     currency: string;
     kind: string;
     meta: string;
-    price: number;
     unit: string;
     unitListId: number;
     purchaseUnit: string;
@@ -231,6 +264,7 @@ export interface Product extends Local {
     available: number;
     reserved: number;
     incoming: number;
+    price: number;
     displayId?: string;
     displayMeaning?: string;
     remoteSource: string;
@@ -257,42 +291,14 @@ export interface PriceListDetail extends Local {
     updatedOn: Date;
     deletedOn?: Date;
 }
-export interface User extends Local {
-    handle?: string;
-    locale: string;
-    zone: string;
-    uid?: string;
-    blocked?: Date;
-    avatarInitials: string;
-    avatarColor: string;
-    avatarX?: number;
-    avatarY?: number;
-    avatarSize?: number;
-    emailAddress: string;
-    emailAddressVerified?: Date;
-    phoneNumber?: string;
-    phoneNumberVerified?: Date;
-    kind: string;
-    firstName: string;
-    lastName?: string;
-    id: ID;
-    version: number;
-    displayOn?: Date;
-    createdOn: Date;
-    updatedOn: Date;
-    deletedOn?: Date;
-    tasks?: Task[];
-    avatar?: string;
-    avatarOriginal?: string;
-}
 export interface Box extends Local {
     name: string;
     language: string;
     country: string;
     currency: string;
-    token: string;
     kind: string;
     configuration: string;
+    token: string;
     id: ID;
     version: number;
     displayOn?: Date;
@@ -318,16 +324,23 @@ export interface ContactNetwork extends ContactElement, Local {
     deletedOn?: Date;
 }
 export interface Member extends Local {
+    kind: string;
+    boxId: number;
     userId: number;
     role: string;
-    boxId: number;
-    kind: string;
     id: ID;
     version: number;
     displayOn?: Date;
     createdOn: Date;
     updatedOn: Date;
     deletedOn?: Date;
+}
+export interface PendingReceivablesResultDataGroup {
+    count?: number;
+    dueDays?: number;
+    debits?: number;
+    credits?: number;
+    net?: number;
 }
 export interface ContactPhone extends ContactElement, Local {
     number: string;
@@ -346,8 +359,8 @@ export interface ContactPhone extends ContactElement, Local {
 }
 export interface Currency extends Local {
     name: string;
-    code: string;
     kind: string;
+    code: string;
     id: ID;
     version: number;
     displayOn?: Date;
@@ -355,30 +368,20 @@ export interface Currency extends Local {
     updatedOn: Date;
     deletedOn?: Date;
 }
-export interface Zone {
-    name: string;
-    offset: number;
-    code: string;
-    description: string;
-}
-export interface DeleteTaskStateResult {
-    id?: ID;
-    errors?: UserError[];
-}
 export interface Task extends Local {
     zone: string;
+    start: Date;
+    description?: string;
+    kind: string;
+    color: string;
+    backgroundColor: string;
+    meaning?: string;
+    due: Date;
     status: string;
     stateSequence?: number;
     title: string;
-    backgroundColor: string;
     latest: Date;
     finish?: Date;
-    color: string;
-    description?: string;
-    kind: string;
-    start: Date;
-    meaning?: string;
-    due: Date;
     id: ID;
     version: number;
     displayOn?: Date;
@@ -388,25 +391,16 @@ export interface Task extends Local {
     reference?: Local;
     parent?: Task;
     children?: Task[];
+    responsible?: User;
     ascendants?: Task[];
     descendants?: Task[];
-    responsible?: User;
 }
-export interface UserError {
-    name: string;
-    value: string;
-    code?: string;
-}
-export interface CreateUpdateUserResult {
-    user?: User;
-    errors?: UserError[];
-}
-export interface CreateAddTagResult {
+export interface UpdateTagDetailResult {
     tag?: Tag;
     errors?: UserError[];
 }
-export interface CreateTaskFlowResult {
-    flow?: TaskFlow;
+export interface CreateTaskResult {
+    task?: Task;
     errors?: UserError[];
 }
 export interface Application extends Local {
@@ -421,27 +415,10 @@ export interface Application extends Local {
     updatedOn: Date;
     deletedOn?: Date;
 }
-export interface BusinessCurrency extends Local {
-    currency: string;
-    businessId: number;
-    kind: string;
-    id: ID;
-    version: number;
-    displayOn?: Date;
-    createdOn: Date;
-    updatedOn: Date;
-    deletedOn?: Date;
-}
-export interface Customer extends Local {
+export interface Unit extends Local {
     name: string;
-    comment: string;
-    contactId: number;
-    representativeId: number;
-    creditLimit: number;
-    creditDays: number;
-    taxId: string;
     kind: string;
-    meta: string;
+    code: string;
     displayId?: string;
     displayMeaning?: string;
     remoteSource: string;
@@ -452,9 +429,56 @@ export interface Customer extends Local {
     createdOn: Date;
     updatedOn: Date;
     deletedOn?: Date;
-    receivables?: ReceivableDocument[];
-    sales?: SaleDocument[];
+}
+export interface BusinessCurrency extends Local {
+    currency: string;
+    kind: string;
+    businessId: number;
+    id: ID;
+    version: number;
+    displayOn?: Date;
+    createdOn: Date;
+    updatedOn: Date;
+    deletedOn?: Date;
+}
+export interface Customer extends Local {
+    name: string;
+    comment: string;
+    kind: string;
+    meta: string;
+    taxId: string;
+    contactId: number;
+    representativeId: number;
+    creditLimit: number;
+    creditDays: number;
+    displayId?: string;
+    displayMeaning?: string;
+    remoteSource: string;
+    remoteId: string;
+    id: ID;
+    version: number;
+    displayOn?: Date;
+    createdOn: Date;
+    updatedOn: Date;
+    deletedOn?: Date;
     invoices?: SaleDocument[];
+    sales?: SaleDocument[];
+    receivables?: ReceivableDocument[];
+}
+export interface TaskFlowStructure extends Local {
+    first: Boolean;
+    kind: string;
+    status: string;
+    flowId: number;
+    stateId: number;
+    stateSequence: number;
+    id: ID;
+    version: number;
+    displayOn?: Date;
+    createdOn: Date;
+    updatedOn: Date;
+    deletedOn?: Date;
+    state: TaskState;
 }
 export interface ContactEmail extends ContactElement, Local {
     address: string;
@@ -473,15 +497,15 @@ export interface ContactEmail extends ContactElement, Local {
 }
 export interface Note extends Local {
     zone: string;
-    referenceId: number;
-    latitude?: number;
-    longitude?: number;
-    description: string;
-    kind: string;
-    displayOn?: Date;
     start: Date;
     locked: Boolean;
     pinned: Boolean;
+    description: string;
+    kind: string;
+    displayOn?: Date;
+    latitude?: number;
+    longitude?: number;
+    referenceId: number;
     id: ID;
     version: number;
     createdOn: Date;
@@ -489,19 +513,28 @@ export interface Note extends Local {
     deletedOn?: Date;
     hashtags?: Hashtag[];
 }
-export interface PendingReceivablesByDueDaysClassResultData {
-    count?: number;
-    dueDaysClass?: number;
-    debits?: number;
-    credits?: number;
+export interface PendingReceivablesHistoryResult {
+    now?: Date;
+    data?: ReceivablePendingByDate[];
+}
+export interface Zone {
+    name: string;
+    offset: number;
+    description: string;
+    code: string;
+}
+export interface UserError {
+    name: string;
+    value: string;
+    code?: string;
 }
 export interface Stock extends Local {
-    warehouseId: number;
     kind: string;
-    productId: number;
     available: number;
     reserved: number;
     incoming: number;
+    productId: number;
+    warehouseId: number;
     remoteSource: string;
     remoteId: string;
     id: ID;
@@ -512,8 +545,8 @@ export interface Stock extends Local {
     deletedOn?: Date;
 }
 export interface ContactUrl extends ContactElement, Local {
-    specification: string;
     kind: string;
+    specification: string;
     contactId: number;
     sequence: number;
     locus?: string;
@@ -530,6 +563,17 @@ export interface SaleDocumentDetail extends Local {
     entry: string;
     comment: string;
     item: string;
+    kind: string;
+    meta: string;
+    unit: string;
+    meaning: string;
+    total: number;
+    originalCurrency: string;
+    originalRate: number;
+    originalTotal: number;
+    productId: number;
+    price: number;
+    displayLine: number;
     discount: number;
     tax: number;
     profit: number;
@@ -550,17 +594,6 @@ export interface SaleDocumentDetail extends Local {
     salePrice: number;
     originalPrice: number;
     originalSalePrice: number;
-    kind: string;
-    meta: string;
-    productId: number;
-    price: number;
-    unit: string;
-    meaning: string;
-    total: number;
-    originalCurrency: string;
-    originalRate: number;
-    originalTotal: number;
-    displayLine: number;
     remoteSource: string;
     remoteId: string;
     id: ID;
@@ -570,12 +603,16 @@ export interface SaleDocumentDetail extends Local {
     updatedOn: Date;
     deletedOn?: Date;
 }
+export interface DeleteTaskStateResult {
+    id?: ID;
+    errors?: UserError[];
+}
 export interface TaskFlow extends Local {
-    title: string;
-    backgroundColor: string;
-    color: string;
     description?: string;
     kind: string;
+    color: string;
+    backgroundColor: string;
+    title: string;
     id: ID;
     version: number;
     displayOn?: Date;
@@ -585,12 +622,7 @@ export interface TaskFlow extends Local {
     states?: TaskState[];
     structure?: ClassifiedTaskFlowStructure;
 }
-export interface UpdateTaskResult {
-    task?: Task;
-    errors?: UserError[];
-}
 export interface PendingReceivableResultData {
-    contactId?: ID;
     dueDaysClass?: number;
     dueDays?: number;
     debits?: number;
@@ -598,53 +630,20 @@ export interface PendingReceivableResultData {
     contactDisplayName?: string;
     customerName?: string;
     customerRepresentativeId?: ID;
+    contactId?: ID;
     customerId?: ID;
 }
-export interface Unit extends Local {
-    name: string;
-    code: string;
-    kind: string;
-    displayId?: string;
-    displayMeaning?: string;
-    remoteSource: string;
-    remoteId: string;
-    id: ID;
-    version: number;
-    displayOn?: Date;
-    createdOn: Date;
-    updatedOn: Date;
-    deletedOn?: Date;
-}
-export interface TaskFlowStructure extends Local {
-    first: Boolean;
-    status: string;
-    flowId: number;
-    stateId: number;
-    stateSequence: number;
-    kind: string;
-    id: ID;
-    version: number;
-    displayOn?: Date;
-    createdOn: Date;
-    updatedOn: Date;
-    deletedOn?: Date;
-    state: TaskState;
-}
-export interface ReceivablePaymentHistoryResult {
-    issued?: Date;
-    total?: number;
-}
-export interface UpdateTagDetailResult {
-    tag?: Tag;
+export interface TaskFlowStructureResult {
+    flow?: TaskFlow;
     errors?: UserError[];
 }
 export interface BoxApplicationBusinessPermission extends Local {
-    boxId: number;
-    applicationId: number;
-    businessId: number;
     kind: string;
     configuration: string;
     meta: string;
+    boxId: number;
+    applicationId: number;
+    businessId: number;
     id: ID;
     version: number;
     displayOn?: Date;
@@ -655,6 +654,21 @@ export interface BoxApplicationBusinessPermission extends Local {
 export interface SaleDocument extends Local {
     entry: string;
     comment?: string;
+    kind: string;
+    meta?: string;
+    displayOn?: Date;
+    taxId?: string;
+    representativeId: number;
+    customerId: number;
+    meaning: string;
+    issued: Date;
+    due: Date;
+    total: number;
+    pending: number;
+    originalCurrency: string;
+    originalRate: number;
+    originalTotal: number;
+    originalPending: number;
     payment: string;
     required?: Date;
     shipped?: Date;
@@ -673,21 +687,6 @@ export interface SaleDocument extends Local {
     originalTax: number;
     originalProfit: number;
     originalSaleTotal: number;
-    representativeId: number;
-    taxId?: string;
-    kind: string;
-    meta?: string;
-    displayOn?: Date;
-    customerId: number;
-    meaning: string;
-    issued: Date;
-    due: Date;
-    total: number;
-    pending: number;
-    originalCurrency: string;
-    originalRate: number;
-    originalTotal: number;
-    originalPending: number;
     displayId?: string;
     displayMeaning?: string;
     remoteSource: string;
@@ -699,9 +698,14 @@ export interface SaleDocument extends Local {
     deletedOn?: Date;
     receivable?: ReceivableDocument;
 }
-export interface PendingReceivablesHistoryResult {
-    now?: Date;
-    data?: ReceivablePendingByDate[];
+export interface ReceivablePendingByDate {
+    date?: Date;
+    future?: ReceivablePendingByEntry;
+    past?: ReceivablePendingByEntry;
+    total?: ReceivablePendingByEntry;
+}
+export interface PendingReceivablesResult {
+    data?: PendingReceivablesResultData;
 }
 export interface ReceivableDocument extends Local {
     entry: string;
@@ -732,12 +736,45 @@ export interface ReceivableDocument extends Local {
     paid?: Date;
     reconciliationDetails?: ReceivableReconciliationDetail[];
 }
-export interface PendingReceivablesResultDataGroup {
-    count?: number;
-    dueDays?: number;
-    debits?: number;
-    credits?: number;
-    net?: number;
+export interface UserReference extends Local {
+    handle: string;
+    kind: string;
+    referenceId: number;
+    userId: number;
+    id: ID;
+    version: number;
+    displayOn?: Date;
+    createdOn: Date;
+    updatedOn: Date;
+    deletedOn?: Date;
+}
+export interface User extends Local {
+    handle?: string;
+    locale: string;
+    zone: string;
+    kind: string;
+    firstName: string;
+    lastName?: string;
+    uid?: string;
+    blocked?: Date;
+    avatarInitials: string;
+    avatarColor: string;
+    avatarX?: number;
+    avatarY?: number;
+    avatarSize?: number;
+    emailAddress: string;
+    emailAddressVerified?: Date;
+    phoneNumber?: string;
+    phoneNumberVerified?: Date;
+    id: ID;
+    version: number;
+    displayOn?: Date;
+    createdOn: Date;
+    updatedOn: Date;
+    deletedOn?: Date;
+    avatar?: string;
+    avatarOriginal?: string;
+    tasks?: Task[];
 }
 export interface ReceivableReconciliation extends Local {
     comment: string;
@@ -756,14 +793,18 @@ export interface ReceivableReconciliation extends Local {
     deletedOn?: Date;
     details?: ReceivableReconciliationDetail[];
 }
+export interface UpdateTaskStateResult {
+    state?: TaskState;
+    errors?: UserError[];
+}
 export interface CreateTaskStateResult {
     state?: TaskState;
     errors?: UserError[];
 }
 export interface TagDetail extends Local {
+    kind: string;
     referenceId: number;
     tagId: number;
-    kind: string;
     remoteSource: string;
     remoteId: string;
     id: ID;
@@ -773,25 +814,26 @@ export interface TagDetail extends Local {
     updatedOn: Date;
     deletedOn?: Date;
 }
-export interface PendingReceivableResult {
-    representatives?: Representative[];
-    data?: PendingReceivableResultData[];
-}
-export interface TaskState extends Local {
-    parentId?: ID;
-    flowId: ID;
-    title: string;
-    backgroundColor: string;
-    parentSequence: number;
-    color: string;
-    description?: string;
+export interface TaskHistory extends Local {
+    start: Date;
     kind: string;
+    due: Date;
+    status: string;
+    responsibleId?: number;
+    flowId?: number;
+    stateId?: number;
+    finish: Date;
+    taskId: number;
     id: ID;
     version: number;
     displayOn?: Date;
     createdOn: Date;
     updatedOn: Date;
     deletedOn?: Date;
+}
+export interface CreateUpdateUserResult {
+    errors?: UserError[];
+    user?: User;
 }
 export interface Business extends Local {
     name: string;
@@ -799,11 +841,11 @@ export interface Business extends Local {
     provider: string;
     country: string;
     currency: string;
-    boxId: number;
-    taxId: string;
     description: string;
     kind: string;
     configuration: string;
+    boxId: number;
+    taxId: string;
     id: ID;
     version: number;
     displayOn?: Date;
@@ -811,17 +853,16 @@ export interface Business extends Local {
     updatedOn: Date;
     deletedOn?: Date;
 }
-export interface ReceivablePendingByDate {
-    date?: Date;
-    past?: ReceivablePendingByEntry;
-    future?: ReceivablePendingByEntry;
-    total?: ReceivablePendingByEntry;
+export interface ReceivablePending {
+    count?: number;
+    dueDays?: number;
+    pending?: number;
 }
 export interface UnitListDetail extends Local {
-    alternativeUnit: string;
-    alternativeFactor: number;
     kind: string;
     unitListId: number;
+    alternativeUnit: string;
+    alternativeFactor: number;
     displayId?: string;
     displayMeaning?: string;
     remoteSource: string;
@@ -834,10 +875,10 @@ export interface UnitListDetail extends Local {
     deletedOn?: Date;
 }
 export interface Tag extends Local {
-    color: string;
-    background: string;
     description: string;
     kind: string;
+    color: string;
+    backgroundColor: string;
     meaning: string;
     remoteSource: string;
     remoteId: string;
@@ -848,20 +889,20 @@ export interface Tag extends Local {
     updatedOn: Date;
     deletedOn?: Date;
 }
-export interface CreateContactResult {
-    contact?: Contact;
+export interface CreateTaskFlowResult {
+    flow?: TaskFlow;
     errors?: UserError[];
 }
 export interface Organization extends Contact, Local {
     comment: string;
     displayName: string;
-    contactId: number;
-    code: string;
     kind: string;
-    meta: string;
     firstName: string;
     lastName: string;
     organizationName: string;
+    meta: string;
+    contactId: number;
+    code: string;
     position: string;
     remoteSource: string;
     remoteId: string;
@@ -872,16 +913,48 @@ export interface Organization extends Contact, Local {
     updatedOn: Date;
     deletedOn?: Date;
 }
-export interface TaskHistory extends Local {
-    status: string;
-    responsibleId?: number;
-    flowId?: number;
-    stateId?: number;
-    finish: Date;
-    taskId: number;
+export interface PendingReceivablesResultData {
+    future?: PendingReceivablesResultDataGroup;
+    past?: PendingReceivablesResultDataGroup;
+    count?: number;
+    dueDays?: number;
+    debits?: number;
+    credits?: number;
+    net?: number;
+}
+export interface UpdateTaskResult {
+    task?: Task;
+    errors?: UserError[];
+}
+export interface PriceList extends Local {
+    name: string;
+    comment: string;
     kind: string;
-    start: Date;
-    due: Date;
+    meta: string;
+    remoteSource: string;
+    remoteId: string;
+    id: ID;
+    version: number;
+    displayOn?: Date;
+    createdOn: Date;
+    updatedOn: Date;
+    deletedOn?: Date;
+}
+export interface CreateNoteResult {
+    note?: Note;
+    errors?: UserError[];
+}
+export interface Representative extends Local {
+    name: string;
+    comment: string;
+    kind: string;
+    meta: string;
+    taxId: string;
+    contactId: number;
+    displayId?: string;
+    displayMeaning?: string;
+    remoteSource: string;
+    remoteId: string;
     id: ID;
     version: number;
     displayOn?: Date;
@@ -902,55 +975,59 @@ export interface UnitList extends Local {
     updatedOn: Date;
     deletedOn?: Date;
 }
-export interface PendingReceivablesResult {
-    data?: PendingReceivablesResultData;
-}
-export interface CreateTaskResult {
-    task?: Task;
-    errors?: UserError[];
-}
-export interface PriceList extends Local {
-    name: string;
-    comment: string;
-    kind: string;
-    meta: string;
-    remoteSource: string;
-    remoteId: string;
-    id: ID;
-    version: number;
-    displayOn?: Date;
-    createdOn: Date;
-    updatedOn: Date;
-    deletedOn?: Date;
-}
-export interface Representative extends Local {
-    name: string;
-    comment: string;
-    contactId: number;
-    taxId: string;
-    kind: string;
-    meta: string;
-    displayId?: string;
-    displayMeaning?: string;
-    remoteSource: string;
-    remoteId: string;
-    id: ID;
-    version: number;
-    displayOn?: Date;
-    createdOn: Date;
-    updatedOn: Date;
-    deletedOn?: Date;
-}
-export interface CreateNoteResult {
-    note?: Note;
-    errors?: UserError[];
-}
 export interface MemberApplicationPermission extends Local {
     memberId: number;
-    applicationId: number;
     kind: string;
     configuration: string;
     meta: string;
+    applicationId: number;
+    id: ID;
+    version: number;
+    displayOn?: Date;
+    createdOn: Date;
+    updatedOn: Date;
+    deletedOn?: Date;
+}
+export interface CreateAddTagResult {
+    tag?: Tag;
+    errors?: UserError[];
+}
+export interface ReceivablePendingByEntry {
+    debits?: ReceivablePending;
+    credits?: ReceivablePending;
+}
+export interface MemberApplicationBusinessPermission extends Local {
+    memberId: number;
+    kind: string;
+    configuration: string;
+    meta: string;
+    applicationId: number;
+    businessId: number;
+    id: ID;
+    version: number;
+    displayOn?: Date;
+    createdOn: Date;
+    updatedOn: Date;
+    deletedOn?: Date;
+}
+export interface HashtagReference extends Local {
+    handle: string;
+    kind: string;
+    referenceId: number;
+    hashtagId: number;
+    id: ID;
+    version: number;
+    displayOn?: Date;
+    createdOn: Date;
+    updatedOn: Date;
+    deletedOn?: Date;
+}
+export interface Hashtag extends Local {
+    handle: string;
+    description: string;
+    kind: string;
+    color: string;
+    backgroundColor: string;
     id: ID;
     version: number;
     displayOn?: Date;
@@ -967,161 +1044,68 @@ export interface PendingReceivablesByDueDaysClassResult {
     futureDueDays?: number[];
     data?: PendingReceivablesByDueDaysClassResultData[];
 }
-export interface ReceivablePendingByEntry {
-    debits?: ReceivablePending;
-    credits?: ReceivablePending;
-}
-export interface MemberApplicationBusinessPermission extends Local {
-    memberId: number;
-    applicationId: number;
-    businessId: number;
-    kind: string;
-    configuration: string;
-    meta: string;
-    id: ID;
-    version: number;
-    displayOn?: Date;
-    createdOn: Date;
-    updatedOn: Date;
-    deletedOn?: Date;
-}
-export interface PendingReceivablesResultData {
-    past?: PendingReceivablesResultDataGroup;
-    future?: PendingReceivablesResultDataGroup;
-    count?: number;
-    dueDays?: number;
-    debits?: number;
-    credits?: number;
-    net?: number;
-}
-export interface ClassifiedTaskFlowStructure {
-    first?: TaskFlowStructure;
-    pendings: TaskFlowStructure[];
-    fulfilled?: TaskFlowStructure;
-    rejected?: TaskFlowStructure;
-}
-export interface HashtagReference extends Local {
-    handle: string;
-    hashtagId: number;
-    referenceId: number;
-    kind: string;
-    id: ID;
-    version: number;
-    displayOn?: Date;
-    createdOn: Date;
-    updatedOn: Date;
-    deletedOn?: Date;
-}
-export interface ReceivablePending {
-    count?: number;
-    dueDays?: number;
-    pending?: number;
-}
-export interface Hashtag extends Local {
-    handle: string;
-    color: string;
-    background: string;
-    description: string;
-    kind: string;
-    id: ID;
-    version: number;
-    displayOn?: Date;
-    createdOn: Date;
-    updatedOn: Date;
-    deletedOn?: Date;
-}
-export interface UpdateTaskStateResult {
-    state?: TaskState;
-    errors?: UserError[];
-}
-export interface TaskFlowStructureResult {
-    flow?: TaskFlow;
-    errors?: UserError[];
-}
 export interface Country extends Local {
     name: string;
-    code: string;
     kind: string;
+    code: string;
     id: ID;
     version: number;
     displayOn?: Date;
     createdOn: Date;
     updatedOn: Date;
     deletedOn?: Date;
-}
-export interface DefaultTask {
-    id: ID;
-    zone?: string;
-    description: string;
-    due?: Date;
-}
-export interface UpdateTaskInput {
-    zone?: string;
-    responsibleId?: ID;
-    title?: string;
-    backgroundColor?: string;
-    color?: string;
-    description?: string;
-    due?: Date;
-}
-export interface UpdateTaskStateInput {
-    parentId?: ID;
-    title?: string;
-    backgroundColor?: string;
-    parentSequence?: number;
-    color?: string;
-    description?: string;
 }
 export interface TagInput {
     description?: string;
     type?: string;
-    parentId?: ID;
-    backgroundColor?: string;
     color?: string;
+    backgroundColor?: string;
+    parentId?: ID;
 }
-export interface ContactPhoneInput {
-    number?: string;
-    sequence?: number;
-    locus?: string;
+export interface ReceivablePaymentHistoryInputFilter {
+    months?: number;
+    representativeContactId?: ID;
+    customerContactId?: ID;
+    businessId?: ID[];
 }
-export interface ContactLocationIdInput {
-    location: ContactLocationInput;
+export interface ContactAnniversaryIdInput {
+    anniversary: ContactAnniversaryInput;
     id: ID;
 }
-export interface ContactUrlInput {
-    specification?: string;
-    sequence?: number;
-    locus?: string;
-}
-export interface ContactPhoneActionsInput {
-    create: ContactPhoneIdInput[];
-    update: ContactPhoneIdInput[];
+export interface ContactEmailActionsInput {
+    create: ContactEmailIdInput[];
+    update: ContactEmailIdInput[];
     delete: ID[];
 }
-export interface ContactFilterInput {
-    q?: string;
-}
-export interface UpdateNoteInput {
+export interface CreateTaskInput {
+    referenceId?: ID;
+    supervise?: Boolean;
+    parentId?: ID;
     zone?: string;
-    latitude?: number;
-    longitude?: number;
     description?: string;
-    start?: Date;
-    locked?: Boolean;
-    pinned?: Boolean;
-}
-export interface ContactPhoneIdInput {
-    phone: ContactPhoneInput;
-    id: ID;
+    color?: string;
+    backgroundColor?: string;
+    due?: Date;
+    responsibleId?: ID;
+    title?: string;
 }
 export interface ContactEmailIdInput {
     email: ContactEmailInput;
     id: ID;
 }
+export interface ContactLocationInput {
+    latitude?: number;
+    longitude?: number;
+    sequence?: number;
+    locus?: string;
+}
 export interface UpdateSelfInput {
     handle?: string;
     locale?: string;
     zone?: string;
+    firstName?: string;
+    lastName?: string;
+    avatarOriginal?: Upload;
     uid?: string;
     password?: string;
     avatarInitials?: string;
@@ -1131,28 +1115,129 @@ export interface UpdateSelfInput {
     avatarSize?: number;
     emailAddress?: string;
     phoneNumber?: string;
-    firstName?: string;
-    lastName?: string;
-    avatarOriginal?: Upload;
 }
-export interface ReceivablePaymentHistoryInputFilter {
-    months?: number;
-    businessId?: ID[];
-    customerContactId?: ID;
-    representativeContactId?: ID;
+export interface ContactNetworkIdInput {
+    network: ContactNetworkInput;
+    id: ID;
+}
+export interface ContactEmailInput {
+    address?: string;
+    sequence?: number;
+    locus?: string;
+}
+export interface ContactPhoneActionsInput {
+    create: ContactPhoneIdInput[];
+    update: ContactPhoneIdInput[];
+    delete: ID[];
+}
+export interface TaskFlowStructureInput {
+    first?: Boolean;
+    status?: string;
+    stateSequence?: number;
+}
+export interface UpdateTaskStateInput {
+    description?: string;
+    color?: string;
+    backgroundColor?: string;
+    parentId?: ID;
+    title?: string;
+    parentSequence?: number;
+}
+export interface ContactEventFilterInput {
+    days?: number;
+}
+export interface ContactInput {
+    comment?: string;
+    organizationName?: string;
+}
+export interface ContactAnniversaryActionsInput {
+    create: ContactAnniversaryIdInput[];
+    update: ContactAnniversaryIdInput[];
+    delete: ID[];
+}
+export interface ReceivableDocumentFilterInput {
+    entry?: string;
+    remoteSource?: string;
+    pending?: Boolean;
+}
+export interface ContactAnniversaryInput {
+    year?: number;
+    month?: number;
+    day?: number;
+    sequence?: number;
+    locus?: string;
+}
+export interface ContactUrlActionsInput {
+    create: ContactUrlIdInput[];
+    update: ContactUrlIdInput[];
+    delete: ID[];
 }
 export interface CreateTaskStateInput {
     flowId?: ID;
+    description?: string;
+    color?: string;
+    backgroundColor?: string;
     parentId?: ID;
     title?: string;
-    backgroundColor?: string;
     parentSequence?: number;
-    color?: string;
+}
+export interface UpdateNoteInput {
+    zone?: string;
+    start?: Date;
+    locked?: Boolean;
+    pinned?: Boolean;
     description?: string;
+    latitude?: number;
+    longitude?: number;
+}
+export interface ContactEventsFilterInput {
+    days?: number;
+}
+export interface UpdateTaskFlowInput {
+    description?: string;
+    color?: string;
+    backgroundColor?: string;
+    title?: string;
+}
+export interface ContactFilterInput {
+    q?: string;
+}
+export interface ContactUrlInput {
+    specification?: string;
+    sequence?: number;
+    locus?: string;
+}
+export interface UpdateBusinessInput {
+    name?: string;
+    language?: string;
+    provider?: string;
+    country?: string;
+    currency?: string;
+    description?: string;
+    taxId?: string;
 }
 export interface ContactAddressActionsInput {
     create: ContactAddressIdInput[];
     update: ContactAddressIdInput[];
+    delete: ID[];
+}
+export interface UserFilterInput {
+    q?: string;
+}
+export interface ContactNetworkActionsInput {
+    create: ContactNetworkIdInput[];
+    update: ContactNetworkIdInput[];
+    delete: ID[];
+}
+export interface ContactNetworkInput {
+    handle?: string;
+    provider?: string;
+    sequence?: number;
+    locus?: string;
+}
+export interface ContactLocationActionsInput {
+    create: ContactLocationIdInput[];
+    update: ContactLocationIdInput[];
     delete: ID[];
 }
 export interface CreateBusinessInput {
@@ -1161,31 +1246,24 @@ export interface CreateBusinessInput {
     provider?: string;
     country?: string;
     currency?: string;
-    taxId?: string;
     description?: string;
+    taxId?: string;
 }
-export interface ContactAnniversaryIdInput {
-    anniversary: ContactAnniversaryInput;
+export interface ContactPhoneIdInput {
+    phone: ContactPhoneInput;
     id: ID;
 }
-export interface UpdateBusinessInput {
-    name?: string;
-    language?: string;
-    provider?: string;
-    country?: string;
-    currency?: string;
-    taxId?: string;
-    description?: string;
+export interface ContactUrlIdInput {
+    url: ContactUrlInput;
+    id: ID;
 }
-export interface CreateNoteInput {
-    referenceId?: ID;
-    zone?: string;
-    latitude?: number;
-    longitude?: number;
-    description?: string;
-    start?: Date;
-    locked?: Boolean;
-    pinned?: Boolean;
+export interface TagFilterInput {
+    q?: string;
+    limit?: number;
+}
+export interface ContactAddressIdInput {
+    address: ContactAddressInput;
+    id: ID;
 }
 export interface ContactAddressInput {
     reference?: string;
@@ -1197,116 +1275,38 @@ export interface ContactAddressInput {
     sequence?: number;
     locus?: string;
 }
-export interface ContactAnniversaryActionsInput {
-    create: ContactAnniversaryIdInput[];
-    update: ContactAnniversaryIdInput[];
-    delete: ID[];
-}
 export interface CreateTaskFlowInput {
-    title?: string;
-    backgroundColor?: string;
-    color?: string;
     description?: string;
+    color?: string;
+    backgroundColor?: string;
+    title?: string;
 }
-export interface ContactUrlIdInput {
-    url: ContactUrlInput;
-    id: ID;
+export interface ContactPhoneInput {
+    number?: string;
+    sequence?: number;
+    locus?: string;
 }
-export interface ContactLocationActionsInput {
-    create: ContactLocationIdInput[];
-    update: ContactLocationIdInput[];
-    delete: ID[];
-}
-export interface ContactLocationInput {
+export interface CreateNoteInput {
+    referenceId?: ID;
+    zone?: string;
+    start?: Date;
+    locked?: Boolean;
+    pinned?: Boolean;
+    description?: string;
     latitude?: number;
     longitude?: number;
-    sequence?: number;
-    locus?: string;
 }
-export interface ContactUrlActionsInput {
-    create: ContactUrlIdInput[];
-    update: ContactUrlIdInput[];
-    delete: ID[];
-}
-export interface TagFilterInput {
-    q?: string;
-    limit?: number;
-}
-export interface UpdateTaskFlowInput {
-    title?: string;
-    backgroundColor?: string;
-    color?: string;
-    description?: string;
-}
-export interface ContactEventFilterInput {
-    days?: number;
-}
-export interface ContactAnniversaryInput {
-    year?: number;
-    month?: number;
-    day?: number;
-    sequence?: number;
-    locus?: string;
-}
-export interface ContactEmailActionsInput {
-    create: ContactEmailIdInput[];
-    update: ContactEmailIdInput[];
-    delete: ID[];
-}
-export interface ContactNetworkIdInput {
-    network: ContactNetworkInput;
-    id: ID;
-}
-export interface TaskFlowStructureInput {
-    first?: Boolean;
-    status?: string;
-    stateSequence?: number;
-}
-export interface ContactNetworkActionsInput {
-    create: ContactNetworkIdInput[];
-    update: ContactNetworkIdInput[];
-    delete: ID[];
-}
-export interface ReceivableDocumentFilterInput {
-    entry?: string;
-    remoteSource?: string;
-    pending?: Boolean;
-}
-export interface ContactNetworkInput {
-    handle?: string;
-    provider?: string;
-    sequence?: number;
-    locus?: string;
-}
-export interface ContactInput {
-    comment?: string;
-    organizationName?: string;
-}
-export interface ContactEventsFilterInput {
-    days?: number;
-}
-export interface UserFilterInput {
-    q?: string;
-}
-export interface ContactEmailInput {
-    address?: string;
-    sequence?: number;
-    locus?: string;
-}
-export interface CreateTaskInput {
-    referenceId?: ID;
-    parentId?: ID;
-    supervise?: Boolean;
+export interface UpdateTaskInput {
     zone?: string;
+    description?: string;
+    color?: string;
+    backgroundColor?: string;
+    due?: Date;
     responsibleId?: ID;
     title?: string;
-    backgroundColor?: string;
-    color?: string;
-    description?: string;
-    due?: Date;
 }
-export interface ContactAddressIdInput {
-    address: ContactAddressInput;
+export interface ContactLocationIdInput {
+    location: ContactLocationInput;
     id: ID;
 }
 
